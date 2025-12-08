@@ -1,0 +1,30 @@
+setlocale(LC_ALL,"ita");
+	string a;
+	cout<<"Ciao, benvenuto nel nostro gioco Briscola"<<endl;
+	cout<<"Premi a per continuare...." <<endl;
+	cin >> a;
+	system ("CLS");
+	cout<<"Vince la partita il giocaotre o la coppia che totalizza più punti"<<endl;
+	cin >> a;
+	system ("CLS");
+	
+	cout<<"La briscola si gioca con un mazzo da 40 carte, distribuendo 3 carte a ciascuno. La carta che successiva scoperta decide il seme della partita."<<endl;
+	cin >> a;
+	system ("CLS");
+	
+	cout<<"Il primo giocatore gioca una carta e poi gli altri giocatori rispondono con una carta qualsiasi"<<endl;
+	cin >> a;
+	system ("CLS");
+	
+	cout<<"vince la mano chi gioca la briscola pù alta, se non sono state giocate briscole, vince la mano chi ha calato la carta di valore più alto nello stesso seme del primo giocatore"<<endl;
+	cin >> a;
+	system ("CLS");
+
+	cout<<"Le carte hanno un valore di punti:" << endl << " - L'asso vale 11 punti" << endl << " - il tre vale 10 punti" << endl <<" - il re vale 4 punti" << endl << " - il cavallo vale 3 punti" << endl << " - il fante vale 2 punti" << endl<< " - tutte le altre carte valogno 0 punti "<< endl;
+	cin >> a;
+	system ("CLS");
+	
+	cout<<"Vince la partita chi totalizza alemo 61 punti" << endl;
+	cin>> a;
+	system ("CLS");
+
