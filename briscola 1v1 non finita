@@ -1,0 +1,163 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+struct Mydata {
+    char lettera;
+    int numero;
+};
+
+int main(){ //1v1; 1 umano contro un umano
+    setlocale(LC_ALL,"ita");
+	srand(time(NULL));
+    vector<Mydata> mazzo; //vector (mazzo totale) di struct
+    vector <Mydata> mazzo_g1; //vector mazzo giocatore 1
+    vector <Mydata> mazzo_g2; //vector mazzo giocatore 2
+
+   int cartagiocata1, cartascelta1; //variabili giocatore 1
+   int cartagiocata2, cartascelta2; //variabili giocatore 2
+   int cartagiocatab, cartasceltab; //variabili briscola
+    
+    // Inserimento di alcuni elementi
+    mazzo.push_back({'D', 1});//D= denari
+    mazzo.push_back({'D', 2});
+    mazzo.push_back({'D', 3});
+    mazzo.push_back({'D', 4});
+    mazzo.push_back({'D', 5});
+    mazzo.push_back({'D', 6});
+    mazzo.push_back({'D', 7});
+    mazzo.push_back({'D', 8});
+    mazzo.push_back({'D', 9});
+    mazzo.push_back({'D', 10});
+    mazzo.push_back({'C', 1});//C= coppe
+    mazzo.push_back({'C', 2});
+    mazzo.push_back({'C', 3});
+    mazzo.push_back({'C', 4});
+    mazzo.push_back({'C', 5});
+    mazzo.push_back({'C', 6});
+    mazzo.push_back({'C', 7});
+    mazzo.push_back({'C', 8});
+    mazzo.push_back({'C', 9});
+    mazzo.push_back({'C', 10});
+    mazzo.push_back({'B', 1});//B= bastoni
+    mazzo.push_back({'B', 2});
+    mazzo.push_back({'B', 3});
+    mazzo.push_back({'B', 4});
+    mazzo.push_back({'B', 5});
+    mazzo.push_back({'B', 6});
+    mazzo.push_back({'B', 7});
+    mazzo.push_back({'B', 8});
+    mazzo.push_back({'B', 9});
+    mazzo.push_back({'B', 10});
+    mazzo.push_back({'S', 1});//S= spade
+    mazzo.push_back({'S', 2});
+    mazzo.push_back({'S', 3});
+    mazzo.push_back({'S', 4});
+    mazzo.push_back({'S', 5});
+    mazzo.push_back({'S', 6});
+    mazzo.push_back({'S', 7});
+    mazzo.push_back({'S', 8});
+    mazzo.push_back({'S', 9});
+    mazzo.push_back({'S', 10});
+  
+
+    // stampa mazzo totale
+    for (const auto& elem : mazzo) {
+        cout << "Seme: " << elem.lettera 
+             << ", Numero: " << elem.numero << endl;
+    }
+    
+    //BRISCOLA  
+    int nb = mazzo.size(); // Genera un indice casuale compreso tra 0 e n-1
+    
+    for(int i=0; i<1; i++){
+    int mazzocasualeb = rand() % nb; // rand() % n genera un numero casuale tra 0 e n-1
+    
+    Mydata cartapescatab = mazzo[mazzocasualeb];  // pesca il numero casuale dal vettore
+
+	
+   
+    // Stampa  la carta
+        cout << "La briscola è: " 
+             << cartapescatab.lettera << " " 
+             << cartapescatab.numero << endl;
+             
+    
+        mazzo.erase(mazzo.begin() + mazzocasualeb);   // rimuove la carta dal mazzo dopo averla pescata:
+    }
+    
+    // GIOCATORE 1
+    
+    int n1 = mazzo.size(); // Genera un indice casuale compreso tra 0 e n-1
+    
+    for(int i=0; i<3; i++){
+    int mazzocasuale1 = rand() % n1; // rand() % n genera un numero casuale tra 0 e n-1
+    
+    Mydata cartapescata1 = mazzo[mazzocasuale1];  // pesca il numero casuale dal vettore
+
+	
+	mazzo_g1.push_back(cartapescata1);
+   
+    // Stampa  la carta
+        cout << "La carta casuale estratta : " 
+             << cartapescata1.lettera << " " 
+             << cartapescata1.numero << endl;
+             
+    
+        mazzo.erase(mazzo.begin() + mazzocasuale1);   // rimuove la carta dal mazzo dopo averla pescata:
+    }
+        cout << "Carte rimaste nel mazzo: " << mazzo.size() << endl;
+
+    cout<<"quale carta vuoi giocare (1, 2, 3)?"<<endl;
+    cin>>cartagiocata1;
+ 
+    
+    mazzo_g1.erase(mazzo_g1.begin() + cartagiocata1);
+    
+     // stampa vector giocatore 1
+    for (const auto& elem : mazzo_g1) {
+        cout << "Seme: " << elem.lettera 
+             << ", Numero: " << elem.numero << endl;
+    }
+    
+        // GIOCATORE 2
+    
+    int n2 = mazzo.size(); // Genera un indice casuale compreso tra 0 e n-1
+    
+    for(int i=0; i<3; i++){
+    int mazzocasuale2 = rand() % n2; // rand() % n genera un numero casuale tra 0 e n-1
+    
+    Mydata cartapescata2 = mazzo[mazzocasuale2];  // pesca il numero casuale dal vettore
+
+	
+	mazzo_g2.push_back(cartapescata2);
+   
+    // Stampa  la carta
+        cout << "La carta casuale estratta : " 
+             << cartapescata2.lettera << " " 
+             << cartapescata2.numero << endl;
+             
+    
+        mazzo.erase(mazzo.begin() + mazzocasuale2);   // rimuove la carta dal mazzo dopo averla pescata:
+    }
+        cout << "Carte rimaste nel mazzo: " << mazzo.size() << endl;
+
+    cout<<"quale carta vuoi giocare (1, 2, 3)?"<<endl;
+    cin>>cartagiocata2;
+   
+    
+    mazzo_g1.erase(mazzo_g1.begin() + cartagiocata2);
+    
+     // stampa vector giocatore 2
+    for (const auto& elem : mazzo_g1) {
+        cout << "Seme: " << elem.lettera 
+             << ", Numero: " << elem.numero << endl;
+    }
+    
+    //if(cartagiocata1==)
+    
+
+    return 0;
+}
