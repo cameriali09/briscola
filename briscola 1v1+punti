@@ -122,8 +122,8 @@ int main(){ //1v1; 1 umano contro un umano
     
         mazzo.erase(mazzo.begin() + mazzocasuale1);   // rimuove la carta dal mazzo dopo averla pescata:
         
-    if(mazzo_g1.size()==3)
-    
+    if(mazzo_g1.size()==3){
+	
     cout << "Carte rimaste nel mazzo: " << mazzo.size() << endl;
 
     cout<<"quale carta vuoi giocare (1, 2, 3) giocatore 1?"<<endl;
@@ -174,10 +174,11 @@ int main(){ //1v1; 1 umano contro un umano
     }
 }
 }
-}
+
+
     
     //vincitore +conteggio punti (con briscola)
-    
+   // int puntiTotali;
     int puntiTotali = calcolaPunteggio(cartagiocata1) + calcolaPunteggio(cartagiocata2);
     if(cartagiocata1.lettera==cartapescatab.lettera && cartagiocata2.lettera!=cartapescatab.lettera ){
         cout<<"turno vinto dal giocatore 1"<<endl;
@@ -223,6 +224,6 @@ int main(){ //1v1; 1 umano contro un umano
          cout<<"punteggio"<<punteggio1<<endl;
     }
     
-
+}
     return 0;
 }
