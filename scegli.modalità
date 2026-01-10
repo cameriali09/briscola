@@ -1,0 +1,80 @@
+#include <iostream>
+#include <locale>
+
+using namespace std;
+
+// Prototipi
+void giocoSingolo();
+void giocoDoppio();
+void giocoCinque();
+
+int main() {
+    setlocale(LC_ALL, "ITA");
+
+    string risposta;
+
+    do {
+        cout << "\nScegli la modalità di gioco:\n";
+        cout << "s = singolo\n";
+        cout << "d = doppio\n";
+        cout << "c = a cinque\n";
+        cout << "Scelta: ";
+        cin >> risposta;
+
+        if (risposta == "s") {
+            giocoSingolo();
+        }
+        else if (risposta == "d") {
+            giocoDoppio();
+        }
+        else if (risposta == "c") {
+            giocoCinque();
+        }
+        else {
+            cout << "Modalità non valida!\n";
+        }
+
+    } while (risposta != "s" && risposta != "d" && risposta != "c");
+
+    return 0;
+}
+
+
+
+void giocoSingolo() {
+    string risposta;
+
+    do {
+        cout << "\nVuoi giocare contro:\n";
+        cout << "u = umano\n";
+        cout << "r = robot\n";
+        cout << "Scelta: ";
+        cin >> risposta;
+
+        if (risposta == "u") {
+            cout << "Hai scelto Briscola singolo contro un umano.\n";
+            // qui andrai a mettere la partita umano vs umano
+        }
+        else if (risposta == "r") {
+            cout << "Hai scelto Briscola singolo contro il robot.\n";
+            // qui andrai a mettere la partita umano vs robot
+        }
+        else {
+            cout << "Scelta non valida!\n";
+        }
+
+    } while (risposta != "u" && risposta != "r");
+}
+
+
+
+void giocoDoppio() {
+    cout << "\nHai scelto Briscola a coppie (2 vs 2).\n";
+    //logica del doppio
+}
+
+
+void giocoCinque() {
+    cout << "\nHai scelto Briscola a cinque.\n";
+    //logica del gioco a cinque
+}
