@@ -1,0 +1,631 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include<algorithm>
+#include <random>
+#include <chrono>
+#include <thread>
+#define Sleep(ms) std::this_thread::sleep_for(std::chrono::milliseconds(ms)) //per utilizzare in modo seplice sleep
+//#include <windows.h> // per colori e Sleep
+using namespace std;
+
+struct Mydata {
+    char lettera;
+    int numero;
+};
+
+Mydata  cartatavola1, cartatavola2; //variabili globali per carta giocata;
+int mostrarecarta=0;
+
+//funzione pulire schermo
+void clearScreen() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
+
+//funzione punteggio carte
+int calcolaPunteggio(const Mydata& carta) {
+    switch(carta.numero) {
+        case 1: return 11;   
+        case 3: return 10;   
+        case 10: return 4;  
+        case 9: return 3; 
+        case 8: return 2;   
+        default: return 0;   // Altre carte
+    }
+}
+
+//GRAFICA carte
+//retro
+void stampa_retrocarte( int qcarte){
+        cout<<"  .---------------.    .---------------.    .---------------."<<endl;
+    	cout<<" |                 |  |                 |  |                 |"<<endl;
+    	cout<<" |                 |  |                 |  |                 |"<<endl;
+    	cout<<" |                 |  |                 |  |                 |"<<endl;
+    	cout<<" |      /    \\     |  |      /    \\     |  |      /    \\     |"<<endl;
+    	cout<<" |        ¶¶       |  |        ¶¶       |  |        ¶¶       |"<<endl;
+    	cout<<" |     |  ¶¶  |    |  |     |  ¶¶  |    |  |     |  ¶¶  |    |"<<endl;
+    	cout<<" |        ¶¶       |  |        ¶¶       |  |        ¶¶       |"<<endl;
+    	cout<<" |      \\    /     |  |      \\    /     |  |      \\    /     |"<<endl;
+    	cout<<" |                 |  |                 |  |                 |"<<endl;
+    	cout<<" |                 |  |                 |  |                 |"<<endl;
+    	cout<<" |                 |  |                 |  |                 |"<<endl;
+    	cout<<" '-----------------'  '-----------------'  '-----------------'"<<endl;         
+}
+
+//davanti
+void stampa_davanticarte(vector<Mydata>& mazzo_copia){
+            for(int i=0; i<mazzo_copia.size(); i++){
+    	      cout<<"  .---------------.  ";
+        	}
+	        cout<<endl;
+	        for(int v=0; v<4; v++){
+	        for(int i=0; i<mazzo_copia.size(); i++){
+    	      cout<<" |                 | ";
+        	}
+	        cout<<endl;
+	        }
+        	for(int i=0; i<mazzo_copia.size(); i++){
+    	      cout<<" |        "<<mazzo_copia[i].lettera<<"        | ";
+        	}
+        	cout<<endl;
+        	for(int i=0; i<mazzo_copia.size(); i++){
+    	      cout<<" |                 | ";
+        	}
+	        cout<<endl;
+        	for(int i=0; i<mazzo_copia.size(); i++){
+    	     cout<<" |        "<<mazzo_copia[i].numero<<"        | ";
+        	}
+        	cout<<endl;
+        	for(int v=0; v<4; v++){
+	        for(int i=0; i<mazzo_copia.size(); i++){
+    	      cout<<" |                 | ";
+        	}
+	        cout<<endl;
+	        }
+            for(int i=0; i<mazzo_copia.size(); i++){
+    	      	cout<<" '-----------------' ";
+        	}
+	        cout<<endl;
+}
+
+void stampa_cartascelta(Mydata cartavinta){
+    Sleep(500);
+    cout<<"la carta che hai giocato è questa:"<<endl;
+    Sleep(500);
+    cout<<"\033[32m  .---------------.  \033[0m"<<endl;
+    cout<<"\033[32m |                 | \033[0m"<<endl;
+    cout<<"\033[32m |                 | \033[0m"<<endl;
+    cout<<"\033[32m |                 | \033[0m"<<endl;
+    cout<<"\033[32m |                 | \033[0m"<<endl;
+    cout<<"\033[32m |        \033[0m"<<cartavinta.lettera<<"\033[32m        | \033[0m"<<endl;
+    cout<<"\033[32m |                 | "<<endl;
+    cout<<"\033[32m |        \033[0m"<<cartavinta.numero<<"\033[32m        | \033[0m"<<endl;
+    cout<<"\033[32m |                 | \033[0m"<<endl;
+    cout<<"\033[32m |                 | \033[0m"<<endl;
+    cout<<"\033[32m |                 | \033[0m"<<endl;
+    cout<<"\033[32m |                 | \033[0m"<<endl;
+    cout<<"\033[32m '-----------------' \033[0m"<<endl;
+    Sleep(1200);
+}
+
+//suggerimento
+void suggerimento(int scelta1c, int scelta2c, Mydata& briscola ){
+	 Mydata cartagiocatab, cartasceltab; //variabili briscola
+	 
+    if (mostrarecarta==1){ //suggerimento parte il giocatore 1
+        if(scelta1c==10 & scelta2c!=10){  //se il giocatore 1 chiede il suggerimento 
+        cout<<"devi giocare per primo, quindi ti consiglio di non partire con briscole troppo alte o carichi alti, "<<endl;
+        cout<<"prova a giocare una briscola bassa o addirittura un liscio"<<endl;
+        Sleep(3000);
+        }
+        else{
+        if(cartatavola1.lettera==briscola.lettera){
+        	cout<<"l'avversario ha giocato briscola, "<<endl; 
+			cout<<"se ha una carta liscia giocala! "<<endl;  
+			cout<<"altrimenti una che valga pochi punti "<<endl;
+			Sleep(3000);
+		}
+		else{
+			if(calcolaPunteggio(cartatavola1)==0){
+				cout<<"l'avversario ha giocato un liscio,"<<endl;
+				cout<<" se ha una carta pi˘ alta dello stesso seme giocala! "<<endl;
+				cout<<" altrimenti gioca un altro liscio"<<endl;
+				Sleep(3000);
+
+			}
+			else{
+				cout<<"l'avversario ha giocato un carico,"<<endl;
+				cout<<" se ha una briscola giocala! "<<endl;
+				cout<<" altrimenti gioca un liscio"<<endl;
+				Sleep(3000);
+			}
+		}    
+        }
+    }
+    else{  //suggerimento parte il giocatore 2
+        if(scelta1c!=10 & scelta2c==10){  //se il giocatore2 chiede il suggerimento 
+        cout<<"devi giocare per primo, quindi ti consiglio di non partire con briscole troppo alte o carichi alti, "<<endl;
+        cout<<"prova a giocare una briscola bassa o addirittura un liscio"<<endl;
+        Sleep(3000);
+        }
+        else{
+        if(cartatavola2.lettera==briscola.lettera){
+        	cout<<"l'avversario ha giocato briscola, "<<endl; 
+			cout<<"se ha una carta liscia giocala! "<<endl;  
+			cout<<"altrimenti una che valga pochi punti "<<endl;
+			Sleep(3000);
+		}
+		else{
+			if(calcolaPunteggio(cartatavola2)==0){
+				cout<<"l'avversario ha giocato un liscio,"<<endl;
+				cout<<" se ha una carta pi˘ alta dello stesso seme giocala! "<<endl;
+				cout<<" altrimenti gioca un altro liscio"<<endl;
+				Sleep(3000);
+			}
+			else{
+				cout<<"l'avversario ha giocato un carico,"<<endl;
+				cout<<" se ha una briscola giocala! "<<endl;
+				cout<<" altrimenti gioca un liscio"<<endl;
+				Sleep(3000);
+			}
+		}     
+            
+        }
+    }
+}
+
+
+//funzione GIOCATORE 1
+Mydata giocatore1(vector<Mydata>& mazzo, vector<Mydata>& mazzo_g1, Mydata& briscola) {
+    
+    Mydata cartagiocatab, cartasceltab; //variabili briscola
+    Mydata cartascelta1; //variabili giocatore 1
+    int scelta1, scelta2;
+    string risp;
+    
+    Sleep(1000);
+    do{
+    	cout<<"giocatore 1 tocca a te! sei pronto (si/no)?"<<endl;
+    	stampa_retrocarte(3);
+    	cin>>risp;
+    	if (risp!="si"){
+    	clearScreen();
+    	cout<<"tranquillo, ti aspettiamo!"<<endl;
+        Sleep(1000);	
+		}
+	}
+	while(risp!="si");	
+    int elementi_mancanti1 = 3 - mazzo_g1.size(); //elementi devi aggiungere per arrivare a 3
+    
+    for(int i=0; i < elementi_mancanti1; i++){
+        
+        if(mazzo.size()!=0){
+    	Mydata cartapescata1 = mazzo[0];  // pesca la carta dal vettore
+		mazzo_g1.push_back(cartapescata1);
+    	mazzo.erase(mazzo.begin() + 0);   // rimuove la carta dal mazzo dopo averla pescata:
+        }
+	    else{
+	        clearScreen();
+	        cout << "La briscola è: " 
+             << briscola.lettera << " " 
+             << briscola.numero << endl;
+             
+            if(mostrarecarta==2) {        
+                cout<<"la carta giocata da giocatore 2 è "<<cartatavola2.lettera<<" "<<cartatavola2.numero<<endl;
+            }
+    
+	        cout<<"le tue carte che ti sono rimaste sono"<<endl;
+	        stampa_davanticarte(mazzo_g1);
+            cout << "Carte rimaste nel mazzo: " << mazzo.size() << endl;
+            do{
+                cout<<"quale carta vuoi giocare (1, 2, 3) giocatore 1, seleziona 10 se vuoi un suggerimento"<<endl;
+                cin >> scelta1; 
+        		
+        		if(scelta1 < 0 || scelta1 > mazzo_g1.size() || scelta1==10){
+        			if (scelta1==10){
+        				suggerimento(scelta1, scelta2=0, briscola);   
+        			}
+        			else{
+        				cout<<"Questo numero non è tra le opzioni, riprova!"<<endl;  
+        			}
+        		}
+            }
+            while(scelta1 < 0 || scelta1 > mazzo_g1.size());
+    
+            Mydata cartagiocata1 = mazzo_g1[scelta1-1];  // Prendi la carta scelta
+            mazzo_g1.erase(mazzo_g1.begin() + scelta1-1);
+            cartatavola1=cartagiocata1;
+            clearScreen();
+            stampa_cartascelta (cartagiocata1);
+    
+            // stampa vector giocatore 1
+            Sleep(500);
+            if(mazzo_g1.size()!=0){
+                cout<<"giocatore 1 ti rimangono queste carte"<<endl;
+                for(int i=0; i<mazzo_g1.size(); i++){
+                	Sleep(500);
+                    cout<<"carta "<<(i+1)<<":  ";
+                    cout<<mazzo_g1[i].lettera<<" "<<mazzo_g1[i].numero<<endl;
+                }
+                Sleep(1200);
+                clearScreen();
+            }
+            else{	
+            cout<<"non ti rimangono carte:"<<endl;
+            Sleep(1200);
+            clearScreen();
+            }
+            return cartagiocata1;
+		}
+   
+    if(mazzo_g1.size()==3){
+	
+	clearScreen();
+	cout << "La briscola è: " 
+             << briscola.lettera << " " 
+             << briscola.numero << endl;
+             
+    if(mostrarecarta==2) {        
+    cout<<"la carta giocata da giocatore 2 è "<<cartatavola2.lettera<<" "<<cartatavola2.numero<<endl;
+    }
+    
+	cout<<"le tue carte sono"<<endl;
+	stampa_davanticarte(mazzo_g1); //stampa grafica carte
+    cout << "Carte rimaste nel mazzo: " << mazzo.size() << endl;
+    
+    do{
+        cout<<"quale carta vuoi giocare (1, 2, 3) giocatore 1, seleziona 10 se vuoi un suggerimento"<<endl;
+        cin >> scelta1; 
+    
+        if(scelta1 < 0 || scelta1 > mazzo_g1.size() || scelta1==10){
+        if (scelta1==10){
+        suggerimento(scelta1, scelta2=0, briscola);   
+        }
+        else{
+        cout<<"Questo numero non è tra le opzioni, riprova!"<<endl;  
+        }
+        }
+    }
+    while(scelta1 < 0 || scelta1 > mazzo_g1.size());
+    
+    Mydata cartagiocata1 = mazzo_g1[scelta1-1];  // Prendi la carta scelta
+    mazzo_g1.erase(mazzo_g1.begin() + scelta1-1);
+    cartatavola1=cartagiocata1;
+    clearScreen();
+    stampa_cartascelta( cartagiocata1);
+    
+     // stampa vector giocatore 1
+    Sleep(500);
+    if(mazzo_g1.size()!=0){
+        cout<<"giocatore 1 ti rimangono queste carte:"<<endl;
+        //clearScreen();
+        for(int i=0; i<mazzo_g1.size(); i++){
+    	Sleep(500);
+        cout<<"carta "<<(i+1)<<":  ";
+        cout<<mazzo_g1[i].lettera<<" "<<mazzo_g1[i].numero<<endl;
+    	}
+    	Sleep(1200);
+    	clearScreen();
+    }
+    else{
+        cout<<"non ti rimangono carte"<<endl;
+        Sleep(1200);
+        clearScreen();
+    }
+     return cartagiocata1;
+}
+}   
+}
+
+//funzione GIOCATORE 2
+Mydata giocatore2(vector<Mydata>& mazzo, vector<Mydata>& mazzo_g2, Mydata& briscola) {
+    
+    Mydata cartagiocatab, cartasceltab; //variabili briscola
+    Mydata cartascelta2; //variabili giocatore 2
+    int scelta2, scelta1;
+    string risp;
+    
+    Sleep(1000);
+    do{
+    	cout<<"giocatore 2 tocca a te! sei pronto (si/no)?"<<endl;
+    	stampa_retrocarte(3);
+    	cin>>risp;
+    	if (risp!="si"){
+    	clearScreen();
+    	cout<<"tranquillo, ti aspettiamo!"<<endl;
+		Sleep(1000);	
+		}
+	}
+	while(risp!="si");
+    int elementi_mancanti2 = 3 - mazzo_g2.size(); //elementi devi aggiungere per arrivare a 3, turni
+    
+    for(int i=0; i < elementi_mancanti2; i++){
+        
+    	if(mazzo.size()!=0){
+    	Mydata cartapescata2 = mazzo[0];  // pesca la prima carta dal vettore
+		mazzo_g2.push_back(cartapescata2);
+    	mazzo.erase(mazzo.begin() + 0);   // rimuove la carta dal mazzo dopo averla pescata:
+		}
+		else{ 
+		    clearScreen();
+	        cout << "La briscola è: " 
+             << briscola.lettera << " " 
+             << briscola.numero << endl;
+             if(mostrarecarta==1){
+                cout<<"la carta giocata da giocatore 1 è "<<cartatavola1.lettera<<" "<<cartatavola1.numero<<endl; 
+            }
+             
+	        cout<<"le carte che ti sono rimaste sono"<<endl;
+	        stampa_davanticarte(mazzo_g2); //stampa grafica carte
+	        cout << "Carte rimaste nel mazzo: " << mazzo.size() << endl;
+     
+            do{
+                cout<<"quale carta vuoi giocare (1, 2, 3) giocatore 2, seleziona 10 se vuoi un suggerimento"<<endl;
+                cin >> scelta2; 
+                
+    			if(scelta2 < 0 || scelta2 > mazzo_g2.size() || scelta2==10){
+        			if (scelta2==10){
+        				suggerimento(scelta1=0, scelta2, briscola);   
+        			}
+        			else{
+        				cout<<"Questo numero non è tra le opzioni, riprova!"<<endl;  
+        			}
+        		}
+            }
+            while(scelta2 < 0 || scelta2 > mazzo_g2.size());
+
+            Mydata cartagiocata2 = mazzo_g2[scelta2-1];  // Prendi la carta scelta
+            mazzo_g2.erase(mazzo_g2.begin() + scelta2-1);
+            cartatavola2=cartagiocata2;
+            clearScreen();
+            stampa_cartascelta (cartagiocata2);
+    
+            // stampa vector giocatore 2
+            Sleep(500);
+            if(mazzo_g2.size()!=0){
+                cout<<"giocatore 2 ti rimangono queste carte:"<<endl;
+                for(int i=0; i<mazzo_g2.size(); i++){
+                Sleep(500);
+                cout<<"carta "<<(i+1)<<":  ";
+                cout<<mazzo_g2[i].lettera<<" "<<mazzo_g2[i].numero<<endl;
+                }
+                Sleep(1200);
+                clearScreen();
+            }
+            else{
+                cout<<"non ti rimangono carte"<<endl;
+                Sleep(1200);
+                clearScreen();
+            }
+        return cartagiocata2;
+		}
+	
+    if(mazzo_g2.size()==3){
+        
+    clearScreen();
+	cout << "La briscola è: " 
+             << briscola.lettera << " " 
+             << briscola.numero << endl;
+    if(mostrarecarta==1){
+        cout<<"la carta giocata da giocatore 1 è "<<cartatavola1.lettera<<" "<<cartatavola1.numero<<endl; 
+    }
+    
+	cout<<"le tue carte sono"<<endl;
+	stampa_davanticarte(mazzo_g2); //stampa grafica carte
+    cout << "Carte rimaste nel mazzo: " << mazzo.size() << endl;
+    
+    do{
+        cout<<"quale carta vuoi giocare (1, 2, 3) giocatore 2, seleziona 10 se vuoi un suggerimento"<<endl;
+        cin >> scelta2; 
+    
+    	if(scelta2 < 0 || scelta2 > mazzo_g2.size() || scelta1==10){
+        	if (scelta2==10){
+        		suggerimento(scelta1=0, scelta2, briscola);   
+        	}
+        	else{
+        		cout<<"Questo numero non è tra le opzioni, riprova!"<<endl;  
+        	}	
+        }    
+    }
+    while(scelta2 < 0 || scelta2 > mazzo_g2.size());
+
+    Mydata cartagiocata2 = mazzo_g2[scelta2-1];  // Prendi la carta scelta
+    mazzo_g2.erase(mazzo_g2.begin() + scelta2-1);
+    cartatavola2=cartagiocata2;
+    clearScreen();
+    stampa_cartascelta (cartagiocata2);
+    
+     // stampa vector giocatore 2
+    Sleep(500);
+    if(mazzo_g2.size()!=0){
+        cout<<"giocatore 2 ti rimangono queste carte:"<<endl;
+        for(int i=0; i<mazzo_g2.size(); i++){
+        	Sleep(500);
+            cout<<"carta "<<(i+1)<<":  ";
+            cout<<mazzo_g2[i].lettera<<" "<<mazzo_g2[i].numero<<endl;
+        }
+        Sleep(1200);
+        clearScreen();
+    }
+    else{
+        cout<<"non ti rimangono carte"<<endl;
+        Sleep(1200);
+        clearScreen();
+    }
+    return cartagiocata2;
+}
+}
+}
+
+int main(){ //1v1; 1 umano contro un umano
+    setlocale(LC_ALL,"ita");
+	srand(time(NULL));
+    vector<Mydata> mazzo; //vector (mazzo totale) di struct
+    vector <Mydata> mazzo_g1; //vector mazzo giocatore 1
+    vector <Mydata> mazzo_g2; //vector mazzo giocatore 2
+
+    Mydata cartagiocata1; //variabili giocatore 1
+    int punteggio1=0;
+    Mydata cartagiocata2; //variabili giocatore 2
+    int punteggio2=0 ;
+    Mydata cartagiocatab, cartasceltab; //variabili briscola
+    int chiparte=1; //variabili turno partita
+    
+    // Inserimento di alcuni elementi
+    mazzo.push_back({'D', 1});//D= denari
+    mazzo.push_back({'D', 2});
+    mazzo.push_back({'D', 3});
+    mazzo.push_back({'D', 4});
+    mazzo.push_back({'D', 5});
+    mazzo.push_back({'D', 6});
+    mazzo.push_back({'D', 7});
+    mazzo.push_back({'D', 8});
+    mazzo.push_back({'D', 9});
+    mazzo.push_back({'D', 10});
+    mazzo.push_back({'C', 1});//C= coppe
+    mazzo.push_back({'C', 2});
+    mazzo.push_back({'C', 3});
+    mazzo.push_back({'C', 4});
+    mazzo.push_back({'C', 5});
+    mazzo.push_back({'C', 6});
+    mazzo.push_back({'C', 7});
+    mazzo.push_back({'C', 8});
+    mazzo.push_back({'C', 9});
+    mazzo.push_back({'C', 10});
+    mazzo.push_back({'B', 1});//B= bastoni
+    mazzo.push_back({'B', 2});
+    mazzo.push_back({'B', 3});
+    mazzo.push_back({'B', 4});
+    mazzo.push_back({'B', 5});
+    mazzo.push_back({'B', 6});
+    mazzo.push_back({'B', 7});
+    mazzo.push_back({'B', 8});
+    mazzo.push_back({'B', 9});
+    mazzo.push_back({'B', 10});
+    mazzo.push_back({'S', 1});//S= spade
+    mazzo.push_back({'S', 2});
+    mazzo.push_back({'S', 3});
+    mazzo.push_back({'S', 4});
+    mazzo.push_back({'S', 5});
+    mazzo.push_back({'S', 6});
+    mazzo.push_back({'S', 7});
+    mazzo.push_back({'S', 8});
+    mazzo.push_back({'S', 9});
+    mazzo.push_back({'S', 10});
+
+    // stampa mazzo totale
+    for (const auto& elem : mazzo) {
+        cout << "Seme: " << elem.lettera 
+             << ", Numero: " << elem.numero << endl;
+    }
+    
+    random_device rd; // Inizializza il generatore
+    mt19937 g(rd());  // Crea il motore casuale
+    shuffle(mazzo.begin(), mazzo.end(), g); //mescola il mazzo (vettore)
+    Sleep(1000);
+    clearScreen();
+    
+    //BRISCOLA  
+    Mydata cartapescatab = mazzo[39];  // pesca il numero casuale dal vettore
+	
+    // Stampa  la carta
+    	Sleep(1500);
+        cout << "La briscola Ëè: " 
+             << cartapescatab.lettera << " " 
+             << cartapescatab.numero << endl;
+             
+    for(int turni=0; turni<20; turni++){
+    
+        if(chiparte==1){
+        mostrarecarta=1;
+        cartagiocata1 = giocatore1(mazzo, mazzo_g1, cartapescatab);//giocatore1
+        clearScreen();
+        cartagiocata2 = giocatore2(mazzo, mazzo_g2, cartapescatab);//giocatore2
+        clearScreen();
+    	}	
+      
+        else{
+        mostrarecarta=2;
+        cartagiocata2 = giocatore2(mazzo, mazzo_g2, cartapescatab);//giocatore2
+        clearScreen();
+        cartagiocata1 = giocatore1(mazzo, mazzo_g1, cartapescatab);//giocatore1
+        clearScreen();
+        }
+    
+
+    int puntiTotali = calcolaPunteggio(cartagiocata1) + calcolaPunteggio(cartagiocata2);
+
+    if(cartagiocata1.lettera==cartapescatab.lettera || cartagiocata2.lettera==cartapescatab.lettera){
+        if(cartagiocata1.lettera==cartapescatab.lettera && cartagiocata2.lettera==cartapescatab.lettera){ //entrambi briscole
+            if(calcolaPunteggio(cartagiocata1) > calcolaPunteggio(cartagiocata2)){ 
+            cout<<"turno vinto dal giocatore 1"<<endl;
+            chiparte=1;
+            punteggio1+= puntiTotali;
+            cout<<"punteggio"<<punteggio1<<endl;
+            }
+            else{
+            cout<<"turno vinto dal giocatore 2 "<<endl;
+            chiparte=2;
+            punteggio2+= puntiTotali;
+            cout<<"punteggio"<<punteggio2<<endl;
+            }
+        }
+        else if(cartagiocata1.lettera==cartapescatab.lettera && cartagiocata2.lettera!=cartapescatab.lettera ){
+        cout<<"turno vinto dal giocatore 1 "<<endl;
+        chiparte=1;
+        punteggio1+= puntiTotali;
+        cout<<"punteggio "<<punteggio1<<endl;
+        }
+        else{
+        cout<<"turno vinto dal giocatore 2  "<<endl;
+        chiparte=2;
+        punteggio2+= puntiTotali;
+        cout<<"punteggio"<<punteggio2<<endl;
+        }	
+	}
+    else{
+   //vincitore +conteggio punti (senza briscola)
+        if(cartagiocata1.lettera==cartagiocata2.lettera){
+            if(calcolaPunteggio(cartagiocata1) > calcolaPunteggio(cartagiocata2)){ 
+            cout<<"turno vinto dal giocatore 1 "<<endl;
+            chiparte=1;
+            punteggio1+= puntiTotali;
+            cout<<"punteggio"<<punteggio1<<endl;
+            }
+            else{
+            cout<<"turno vinto dal giocatore 2 "<<endl;
+            chiparte=2;
+            punteggio2+= puntiTotali;
+            cout<<"punteggio"<<punteggio2<<endl;
+            }  
+        }
+        else{
+         cout<<"turno vinto dal giocatore 1 "<<endl;
+         chiparte=1;
+         punteggio1+= puntiTotali;
+         cout<<"punteggio"<<punteggio1<<endl;
+        }
+    
+    }
+}
+
+
+if (punteggio1>punteggio2){
+    cout<<"partita vinta dal giocatore 1"<<endl;
+}
+else if(punteggio1==punteggio2){
+    cout<<"pareggio"<<endl;
+}
+else {
+    cout<<"partita vinta dal giocatore 2"<<endl;
+}
+
+
+    return 0;
+}
+
