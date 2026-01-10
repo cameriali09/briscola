@@ -1,0 +1,41 @@
+#include <iostream>
+#include <windows.h>  // Per colori e Sleep
+#include <cstdlib>    // per system()
+using namespace std;
+
+int main() {
+    // Ottieni handle della console
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Testo rosso per "Singolo"
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+    std::cout << "Singolo ---> 1vs1" << std::endl;
+
+    Sleep(1000); // Delay di 1 secondo
+
+    // Testo verde per "Doppio"
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    std::cout << "Doppio ---> 2vs2" << std::endl;
+
+    Sleep(1000); // Delay di 1 secondo
+    
+    // Pulisce la console
+    system("CLS");
+
+    // Testo giallo (rosso + verde) per "Cinque"
+     SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+    std::cout << "Singolo ---> 1vs1" << std::endl;
+     SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    std::cout << "Doppio ---> 2vs2" << std::endl;
+
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    std::cout << "Cinque ---> 2vs3" << std::endl;
+
+    Sleep(1000); // Delay di 1 secondo
+
+    // Ripristina colore standard (bianco)
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+    
+    return 0;
+}
+
